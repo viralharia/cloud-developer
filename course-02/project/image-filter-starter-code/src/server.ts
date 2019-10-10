@@ -1,6 +1,7 @@
-import express from 'express';
+import express, { Request, Response } from 'express';
 import bodyParser from 'body-parser';
-import {filterImageFromURL, deleteLocalFiles} from './util/util';
+import {filterImageFromURL, deleteLocalFiles, imageExtensions} from './util/util';
+import url, {UrlWithStringQuery} from 'url';
 
 (async () => {
 
@@ -28,9 +29,25 @@ import {filterImageFromURL, deleteLocalFiles} from './util/util';
   //   the filtered image file [!!TIP res.sendFile(filteredpath); might be useful]
 
   /**************************************************************************** */
+  app.get("/filteredimage/",async (req: Request, res: Response) => {
+    const {image_url} = req.query;
+    if(validateImageUrl(image_url)){
+      filterImageFromURL(image_url).then(
+        (result) => {
+          return res.status(200).sendFile(result,(err) => {
+            console.log("inside sendfile callback - "+err);
+            deleteLocalFiles([result]);
+          });
+        },
+        (error) => {
+          return res.status(200).send(`Invalid image url - ${image_url}. Please send the valid image url.\n Example of valid url is - `);
+        }
+      );      
+    }else{
+      return res.status(200).send(`Invalid image url - ${image_url}. Please send the valid image url.\n Example of valid url is - `);
+    }  
+  });
 
-  //! END @TODO1
-  
   // Root Endpoint
   // Displays a simple message to the user
   app.get( "/", async ( req, res ) => {
@@ -43,4 +60,24 @@ import {filterImageFromURL, deleteLocalFiles} from './util/util';
       console.log( `server running http://localhost:${ port }` );
       console.log( `press CTRL+C to stop server` );
   } );
+
+  function validateImageUrl(imageURL:string):boolean{
+    
+    try{
+      let temp1 = new url.URL(imageURL);
+    }catch(e){
+      console.log(`error in creating url object - ${e}`);
+      if(e instanceof TypeError){
+        return false;
+      }
+    }
+
+    let imgExt = imageURL.substring(imageURL.lastIndexOf("."));
+    console.log(`img extension - ${imgExt}`);
+
+    if(!imageExtensions.includes(imgExt)){
+      return false;
+    }        
+    return true;
+  }
 })();
