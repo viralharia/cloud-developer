@@ -38,13 +38,14 @@ import url, {UrlWithStringQuery} from 'url';
             console.log("inside sendfile callback - "+err);
             deleteLocalFiles([result]);
           });
-        },
-        (error) => {
-          return res.status(200).send(`Invalid image url - ${image_url}. Please send the valid image url.\n Example of valid url is - `);
         }
-      );      
+      ).catch((error) => {
+        return res.status(422).send(`Unprocessable image at - ${image_url}. Please send the valid image url.\n Example of valid url 
+        is - https://timedotcom.files.wordpress.com/2019/03/kitten-report.jpg`);
+      });      
     }else{
-      return res.status(200).send(`Invalid image url - ${image_url}. Please send the valid image url.\n Example of valid url is - `);
+      return res.status(400).send(`Invalid image url - ${image_url}. Please send the valid image url.\n Example of valid url 
+      is - https://timedotcom.files.wordpress.com/2019/03/kitten-report.jpg`);
     }  
   });
 
@@ -64,7 +65,7 @@ import url, {UrlWithStringQuery} from 'url';
   function validateImageUrl(imageURL:string):boolean{
     
     try{
-      let temp1 = new url.URL(imageURL);
+      let temp1:url.URL = new url.URL(imageURL);
     }catch(e){
       console.log(`error in creating url object - ${e}`);
       if(e instanceof TypeError){

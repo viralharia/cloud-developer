@@ -1,6 +1,8 @@
 import fs from 'fs';
 import Jimp = require('jimp');
 
+const jimpFunctions:string[] = ['greyscale','sepia'];
+
 // filterImageFromURL
 // helper function to download, filter, and save the filtered image locally
 // returns the absolute path to the local image
@@ -12,19 +14,21 @@ export async function filterImageFromURL(inputURL: string): Promise<string>{
     return new Promise( async(resolve, reject) => {
         Jimp.read(inputURL).then(
             async (photo) => {
-                const outpath = '/tmp/filtered.'+Math.floor(Math.random() * 2000)+'.jpg';
-                await photo
-                .resize(256, 256) // resize
-                .quality(60) // set JPEG quality
-                .greyscale() // set greyscale
-                .write(__dirname+outpath, (img)=>{
+                const outpath = '/tmp/filtered.'+getRandomInt(2000)+'.jpg';
+                const jimp: Jimp = photo.resize(photo.getWidth() * 0.60, photo.getHeight() * 0.60) // resize
+                                        .quality(85); // set JPEG quality
+
+                // Deciding randowmly which function to apply on the img - greyscale, sepia , ...                        
+                const functionName:string = jimpFunctions[getRandomInt(jimpFunctions.length)];
+
+                const grey:Jimp =  jimp[functionName].apply(jimp); // set greyscale
+                await grey.write(__dirname+outpath, (img)=>{
                     resolve(__dirname+outpath);
                 });
-            },
-            (error) => {
-                reject(error);
             }
-        );        
+        ).catch((error) => {
+            reject(error);
+        });        
     });
 }
 
@@ -40,4 +44,8 @@ export async function deleteLocalFiles(files:Array<string>){
     }
 }
 
-export const imageExtensions:string[] = ['.jpg', '.png']
+export const imageExtensions:string[] = ['.jpg', '.jpeg', '.png', '.bmp', '.tiff']
+
+function getRandomInt(max: number) {
+    return Math.floor(Math.random() * Math.floor(max));
+  }
