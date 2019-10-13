@@ -16,8 +16,13 @@ router.get('/', async (req: Request, res: Response) => {
     res.send(items);
 });
 
-//@TODO
-//Add an endpoint to GET a specific resource by Primary Key
+// Get a specific resource
+router.get('/:id', 
+    async (req: Request, res: Response) => {
+    let { id } = req.params;
+    const item = await FeedItem.findByPk(id);
+    res.send(item);
+});
 
 // update a specific resource
 router.patch('/:id', 
@@ -33,6 +38,7 @@ router.get('/signed-url/:fileName',
     requireAuth, 
     async (req: Request, res: Response) => {
     let { fileName } = req.params;
+    console.log("fileName = "+fileName)
     const url = AWS.getPutSignedUrl(fileName);
     res.status(201).send({url: url});
 });
@@ -62,7 +68,7 @@ router.post('/',
     });
 
     const saved_item = await item.save();
-
+    console.log(`saved item - ${saved_item.url}`);
     saved_item.url = AWS.getGetSignedUrl(saved_item.url);
     res.status(201).send(saved_item);
 });
