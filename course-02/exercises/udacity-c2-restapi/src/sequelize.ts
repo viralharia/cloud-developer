@@ -1,17 +1,30 @@
-import {Sequelize} from 'sequelize-typescript';
+import { Sequelize } from 'sequelize-typescript';
 import { config } from './config/config';
+import { environment } from './config/config';
+import { Dialect } from 'sequelize/types';
 
 
-const c = config.dev;
+let configurationObj;
+let dbDialect:Dialect;
+if(environment == "PROD"){
+  configurationObj = config.postgresql.prod;
+  dbDialect = 'postgres';
+}else{
+  configurationObj = config.postgresql.dev;
+  dbDialect = "sqlite";
+}
+
+console.log(`db host - ${configurationObj.host}, username - ${configurationObj.username}, ${process.env.DEPLOYMENT_ENV}`);
 
 // Instantiate new Sequelize instance!
 export const sequelize = new Sequelize({
-  "username": c.username,
-  "password": c.password,
-  "database": c.database,
-  "host":     c.host,
+  "username": configurationObj.username,
+  "password": configurationObj.password,
+  "database": configurationObj.database,
+  "host":     configurationObj.host,
+  "port": configurationObj.port,
 
-  dialect: 'postgres',
+  dialect: dbDialect,
   storage: ':memory:',
 });
 
