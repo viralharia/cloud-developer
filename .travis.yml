@@ -22,3 +22,5 @@ after_success:
 deploy:
   provider: script
   script: bash scripts/deploy_kubenetes.sh
+  on:
+    branch: microservice
