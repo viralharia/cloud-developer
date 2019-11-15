@@ -22,4 +22,4 @@ kubectl version
 kubectl set image deployment/backend-user backend-user=vharia/udacity-restapi-user:latest --record
 kubectl set image deployment/backend-feed backend-feed=vharia/udacity-restapi-feed:latest --record
 kubectl set image deployment/frontend frontend=vharia/udacity-frontend:latest --record
-kubectl set image deployment/reverseproxy-deployment reverseproxy=vharia/reverseproxy:latest --record
+kubectl set image deployment/reverseproxy reverseproxy=vharia/reverseproxy:latest --record
