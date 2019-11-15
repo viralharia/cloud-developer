@@ -18,3 +18,4 @@ script:
 after_success:
   - docker login -u "$DOCKER_USERNAME" -p "$DOCKER_PASSWORD"
   - docker-compose -f course-03/exercises/deployment/docker/docker-compose-build.yaml push
+  - "./scripts/deploy_kubenetes.sh"
