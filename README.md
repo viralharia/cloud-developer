@@ -23,10 +23,11 @@ There are total 4 microservices in the system -
     - JWT_SECRET
     
 ### Docker Images
- - All the services have their respective Docker files.
- - Docker compose file is located at - __course-03/exercises/deployment/docker__ in the repository.
+ - All the services have their respective Docker files inside them.
+ - The Docker images can be build either individually or using `docker-compose`
+ - `docker-compose` build file is located at - __course-03/exercises/deployment/docker/docker-compose-build.yaml__ in the repository.
 	
- - Use the below docker-compose command to build all the Docker Images
+ - Use the below `docker-compose` command to build all the Docker Images
 ```
 sudo docker-compose -f {path to the docker-compose-build.yaml}/docker-compose-build.yaml build
 ```
@@ -62,11 +63,10 @@ There are 2 parts of this:
 - Before starting, make sure your local `kubectl` is able to connect to your cluster. Run `kubectl version` command and you should see the server component as well in the output.
 ![kubectl version]()
 - The kubernetes config files are located at - __/course-03/exercises/deployment/k8s/__ in the repository.
-- First create the configMaps and secrets required for the application.
-    - Create **_configmaps_** and **_secrets_** for your application
+  - First create the **_configmaps_** and **_secrets_** required for the application.
       - update the values first in `env-configmap.yaml` file and then apply the config map by cmd - `kubectl apply -f env-configmap.yaml`
       - Similarly, updates the values first in both the secrets (base64 encoded) in `env-secret.yaml` and `aws-secret.yaml` files and then apply the secrets by using the `apply` cmd - `kubectl apply -f {fileName}`
-    - Next, start creating the `deployment` and `service` objects for each of our service.
+  - Next, start creating the `deployment` and `service` objects for each of our service.
       - backend-user
         - deployment : `kubectl apply -f    	backend-user-deployment.yaml`
         - **please note: all the deployments uses the image that we created above. If you have changed the image name above, then change the image name in all the deployments.yaml file as well**
