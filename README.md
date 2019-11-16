@@ -36,6 +36,7 @@ sudo docker images
 ```
 
 You should see something similar like below picture
+![docker-images](readme-screenshots/docker-images.png)
 
 ### Starting the app as containers on a local system
 - After all the images are built locally using the `docker-compose build` command, use the below `docker-compose` command to run the application containers locally.
@@ -43,8 +44,10 @@ You should see something similar like below picture
 docker compose up		
 ```	
 - `docker-compose up` command will create container for each of the 4 services, and you should see similar to the below picture in your terminal.
-- After that, navigate to - `localhost:8100`
+![docker-images](readme-screenshots/docker-compose-up.png)
 
+- After that, navigate to - `localhost:8100`
+![docker-images](readme-screenshots/localhost.png)
 	
 ## Setup and Running application on AWS 
 There are 2 parts of this:  
