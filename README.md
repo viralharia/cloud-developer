@@ -9,24 +9,44 @@ There are total 4 microservices in the system -
 4. Frontend : /course-03/exercises/udacity-c3-frontend/
 
 ## Running the services locally on Docker containers
+### Prerequisites
+- Docker compose
+- Environment variables
+  - To create and run the application locally using Docker containers, following **_environment variables_** needs to be configured first:
+    - POSTGRESS_USERNAME
+    - POSTGRESS_PASSWORD
+    - POSTGRESS_DB
+    - POSTGRESS_HOST
+    - AWS_REGION
+    - AWS_PROFILE
+    - AWS_BUCKET
+    - JWT_SECRET
+    
 ### Docker Images
- - All the services have their respective Docker files
- - Docker compose file located at - 
+ - All the services have their respective Docker files.
+ - Docker compose file located at - __course-03/exercises/deployment/docker__
 	
- - Use the below docker compose command to build the Docker Images
+ - Use the below docker-compose command to build all the Docker Images
 ```
-Docker compose build
+sudo docker-compose -f {path to the docker-compose-build.yaml}/docker-compose-build.yaml build
 ```
+- Once all the images are built successfully, run the below docker command to verify the images
+```
+sudo docker images
+```
+
+You should see something similar like below picture
 
 ### Starting the app as containers on a local system
- - docker compose up		
-	
-### Updating and deploying new docker images
-- use the docker compose push
+- After all the images are built locally using the `docker-compose build` command, use the below `docker-compose` command to run the application containers locally.
+```
+docker compose up		
+```	
+- `docker-compose up` command will create container for each of the 4 services, and you should see similar to the below picture in your terminal.
+- After that, navigate to - `localhost:8100`
 
-
 	
-## Setup and Running application on AWS
+## Setup and Running application on AWS 
 There are 2 parts of this:  
 ### 1. Setting up the Kubernetes cluster:
 - One of the simplest way to setup the cluster on AWS is using Kubeone and Terraform.
